@@ -1,21 +1,21 @@
 #!/bin/sh
 set -e
 
-# Set install root (default to $HOME for rootless installation)
-GMA3_INSTALL_ROOT="${GMA3_INSTALL_ROOT:-$HOME}"
-
-# Determine bin directory based on install root
-if [ "$GMA3_INSTALL_ROOT" = "/root" ]; then
-    # Rootful mode: system-wide installation
-    BIN_DIR="/usr/bin"
-    MODE="rootful"
-else
-    # Rootless mode: user installation
-    BIN_DIR="$HOME/.local/bin"
-    MODE="rootless"
+# Check if running with sudo/root privileges
+if [ "$(id -u)" != "0" ]; then
+   echo "This script must be run with sudo"
+   exit 1
 fi
 
-echo "Uninstalling GrandMA3 ($MODE mode)..."
+# Root installation paths
+GMA3_INSTALL_ROOT="/root"
+BIN_DIR="/usr/bin"
+
+# Determine the user who invoked sudo
+REAL_USER="${SUDO_USER:-$USER}"
+USER_HOME=$(eval echo "~$REAL_USER")
+
+echo "Uninstalling GrandMA3 (root installation)..."
 echo "Install root: $GMA3_INSTALL_ROOT"
 echo "Executable: $BIN_DIR/gma3"
 echo ""
@@ -40,15 +40,15 @@ if [ -f "$BIN_DIR/gma3" ]; then
     rm -f "$BIN_DIR/gma3"
 fi
 
-# Remove desktop file and icon (always in $HOME/.local)
-if [ -f "$HOME/.local/share/applications/gma3.desktop" ]; then
+# Remove desktop file and icon (from the user's home)
+if [ -f "$USER_HOME/.local/share/applications/gma3.desktop" ]; then
     echo "Removing desktop launcher..."
-    rm -f "$HOME/.local/share/applications/gma3.desktop"
+    rm -f "$USER_HOME/.local/share/applications/gma3.desktop"
 fi
 
-if [ -d "$HOME/.local/share/gma3" ]; then
+if [ -d "$USER_HOME/.local/share/gma3" ]; then
     echo "Removing application data..."
-    rm -rf "$HOME/.local/share/gma3"
+    rm -rf "$USER_HOME/.local/share/gma3"
 fi
 
 echo ""

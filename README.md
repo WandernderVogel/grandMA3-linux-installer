@@ -1,40 +1,42 @@
-## Instructions
+# grandMA3 Linux Installer
 
-1. Download "grandMA3 Software x.x.x.x" under "Software + Release Notes" section
-2. Run the installer using one of the installation modes below
+Install grandMA3 onPC on Linux with a simple shell script.
 
-## Installation Modes
+## Prerequisites
 
-### Rootless Installation (Default)
-Installs to your home directory without requiring sudo:
+- `unzip` - for extracting the installer
+- `xmllint` (libxml2-utils) - for parsing release files
+- `sudo` access - required for installation
+
+## Installation
+
+1. Download the **grandMA3 stick package** from [MA Lighting Downloads](https://www.malighting.com/downloads/)
+   - Look for "grandMA3 Software x.x.x.x" under "Software + Release Notes"
+   - Download the file named `grandMA3_stick_vx.x.x.x.zip`
+
+2. Run the installer:
 ```bash
-./install.sh ./path/to/grandMA3_stick_vx.x.x.x.zip
+sudo ./install.sh ./path/to/grandMA3_stick_vx.x.x.x.zip
 ```
-- Files installed to: `~/MALightingTechnology`
-- Executable: `~/.local/bin/gma3`
-- Run with: `gma3`
-- Works in read-only distros like Universal Blue
 
-### Rootful Installation (Testing/Original Method)
-Installs to /root directory, matching the original fork behavior:
+3. Launch GrandMA3:
 ```bash
-GMA3_INSTALL_ROOT=/root sudo ./install.sh ./path/to/grandMA3_stick_vx.x.x.x.zip
+gma3
 ```
-- Files installed to: `/root/MALightingTechnology`
-- Executable: `/usr/bin/gma3`
-- Run with: `gma3` (sudo is invoked automatically by the script)
-- Useful for testing if newer versions require root access
+
+Or use the desktop launcher from your application menu.
+
+## What Gets Installed
+
+- **Software files**: `/root/MALightingTechnology/gma3_x.x/`
+- **Executable**: `/usr/bin/gma3`
+- **Desktop launcher**: `~/.local/share/applications/gma3.desktop`
+- **Icon**: `~/.local/share/gma3/gma3.ico`
 
 ## Uninstalling
 
-### Rootless Uninstall
 ```bash
-./uninstall.sh
-```
-
-### Rootful Uninstall
-```bash
-GMA3_INSTALL_ROOT=/root sudo ./uninstall.sh
+sudo ./uninstall.sh
 ```
 
 The uninstall script will:
@@ -43,16 +45,24 @@ The uninstall script will:
 - Remove the desktop launcher and icon
 - Ask for confirmation before proceeding
 
-## Info
+## Known Issues
 
-Software can be installed in either rootless mode (default) or rootful mode.
-A desktop launcher `gma3.desktop` is created at `~/.local/share/applications`
-for easy GUI access in both modes.
+### Recovery Mode Banner
 
-## Thanks
+GrandMA3 will display a red "RECOVERY MODE" banner when running on Linux. This is expected behavior and **does not affect functionality**. The software is fully functional despite this message.
 
-Thanks to the original repo:
-https://github.com/routmoute/grandMA3-linux-installer
+**Why this happens**: GrandMA3 v2.x performs hardware validation checks designed for official MA Lighting consoles. When run on generic Linux hardware, it enters recovery mode as a safety mechanism. However, the interface remains fully responsive and usable.
 
-Thanks to johnsudaar and audiofanzine forum:
-https://fr.audiofanzine.com/controleur-d-eclairage-informati/ma-lighting/grandma-onpc/forums/t.706000,grandma3-il-est-possible-de-le-faire-tourner-sur-linux.html
+### Requires Root/Sudo
+
+The application must be run with sudo to function properly. The installer creates a launcher script that automatically handles this, so you can run `gma3` from the command line or use the desktop launcher without manually typing sudo.
+
+## Tested On
+
+- Fedora 43 (KDE Plasma on Wayland)
+- GrandMA3 v2.3.2.0
+
+## Credits
+
+- Original installer script: [routmoute/grandMA3-linux-installer](https://github.com/routmoute/grandMA3-linux-installer)
+- Installation method discovered by johnsudaar: [Audiofanzine Forum Thread](https://fr.audiofanzine.com/controleur-d-eclairage-informati/ma-lighting/grandma-onpc/forums/t.706000,grandma3-il-est-possible-de-le-faire-tourner-sur-linux.html)
