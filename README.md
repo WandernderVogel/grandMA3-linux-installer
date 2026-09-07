@@ -60,7 +60,9 @@ The application must be run with sudo to function properly. The installer create
 ## Tested On
 
 - Fedora 43 (KDE Plasma on Wayland)
+- Debian 13 (KDE Plasma on Wayland)
 - GrandMA3 v2.3.2.0
+- GrandMA3 v2.5.0.3
 
 ## Credits
 
