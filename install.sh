@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
 unzip -o $1 -d /tmp/grandMA3
